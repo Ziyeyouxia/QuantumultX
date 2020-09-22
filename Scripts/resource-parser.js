@@ -145,28 +145,6 @@ var exptime = "";
 var type0 = Type_Check(content0); //  类型判断
 //$notify(type0,"hh",content0)
 
-//响应头流量处理部分
-function SubFlow() {
-    if (Pinfo == 1 && subinfo) {
-        var sinfo = subinfo.replace(/ /g, "").toLowerCase();
-        var total = "总流量: " + (parseFloat(sinfo.split("total=")[1].split(",")[0]) / (1024 ** 3)).toFixed(2) + "GB";
-        var usd = "已用流量: " + ((parseFloat(sinfo.indexOf("upload")!=-1?sinfo.split("upload=")[1].split(",")[0]:"0") + parseFloat(sinfo.split("download=")[1].split(",")[0])) / (1024 ** 3)).toFixed(2) + "GB"
-        var left = "剩余流量: " + ((parseFloat(sinfo.split("total=")[1].split(",")[0]) / (1024 ** 3)) - ((parseFloat(sinfo.indexOf("upload")!=-1?sinfo.split("upload=")[1].split(",")[0]:"0") + parseFloat(sinfo.split("download=")[1].split(",")[0])) / (1024 ** 3))).toFixed(2) + "GB"
-        if (sinfo.indexOf("expire=") != -1) {
-            var epr = new Date(parseFloat(sinfo.split("expire=")[1].split(",")[0]) * 1000);
-            var year = epr.getFullYear();  // 获取完整的年份(4位,1970)
-            var mth = epr.getMonth() + 1 < 10 ? '0' + (epr.getMonth() + 1) : (epr.getMonth() + 1);  // 获取月份(0-11,0代表1月,用的时候记得加上1)
-            var day = epr.getDate() < 10 ? "0" + (epr.getDate()) : epr.getDate();
-            epr = "过期时间: " + year + "-" + mth + "-" + day
-        } else {
-            epr = ""; //"过期时间: ✈️ 未提供該信息" //没过期时间的显示订阅链接
-        }
-        var message = total + "\n" + usd + ", " + left;
-        ntf_flow = 1;
-        $notify("流量信息: ⟦" + subtag + "⟧", epr, message, subinfo_link)
-    }
-}
-
 //flag=1,2,3分别为 server、rewrite、rule 类型
 var flag = 1
 if (type0 == "Subs-B64Encode") {
